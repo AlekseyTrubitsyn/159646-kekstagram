@@ -1,5 +1,5 @@
 function getMessage(a, b) {
-  if (typeof a == "boolean") {
+  if (typeof a === "boolean") {
     if (a) {
       return "Переданное GIF-изображение анимировано и содержит " + b + " кадров";      
     } else {
@@ -7,7 +7,7 @@ function getMessage(a, b) {
     }
   }
 
-  if (typeof a == "number") {
+  if (typeof a === "number") {
     return "Переданное SVG-изображение содержит " + a + " объектов и " + b * 4 + " атрибутов";
   } 
 
