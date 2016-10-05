@@ -20,7 +20,7 @@ function getMessage(a, b) {
 
   if (Array.isArray(a) && Array.isArray(b)) {
     var artifactsSquare = a.reduce(function (sum, currentItem, index) {      
-      return sum + currentItem * b[index];
+      return (currentItem * b[index]) + sum;
     }, 0);
 
     return "Общая площадь артефактов сжатия: " + artifactsSquare + " пикселей";
