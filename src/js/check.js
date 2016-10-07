@@ -1,3 +1,4 @@
+/* exported getMessage(a, b) */
 'use strict';
 
 function getMessage(a, b) {
