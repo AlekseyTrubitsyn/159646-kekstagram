@@ -1,7 +1,6 @@
-/* exported getMessage(a, b) */
-/*'use strict';
+'use strict';
 
-function getMessage(a, b) {
+window.getMessage = function getMessage(a, b) {
   if (typeof a === 'boolean') {
     if (a) {
       return 'Переданное GIF-изображение анимировано и содержит ' + b + ' кадров';
@@ -30,4 +29,4 @@ function getMessage(a, b) {
   }
 
   return 'Переданы некорректные данные';
-}*/
+};
