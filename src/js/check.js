@@ -1,5 +1,5 @@
 /* exported getMessage(a, b) */
-'use strict';
+/*'use strict';
 
 function getMessage(a, b) {
   if (typeof a === 'boolean') {
@@ -30,4 +30,4 @@ function getMessage(a, b) {
   }
 
   return 'Переданы некорректные данные';
-}
+}*/
