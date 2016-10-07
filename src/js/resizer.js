@@ -113,11 +113,38 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      var dashedBorderWidth = this._ctx.lineWidth;
+      var leftTopXY = (-this._resizeConstraint.side / 2) - dashedBorderWidth / 2;
+      var rightBottomXY = this._resizeConstraint.side - dashedBorderWidth / 2;
+
+      this._ctx.strokeRect(leftTopXY, leftTopXY, rightBottomXY, rightBottomXY);
+
+      // Найдем наибольшее расстояние от желтой рамки до края контейнера
+      var verticalPadding = (this._container.height - this._resizeConstraint.side) / 2 + dashedBorderWidth;
+      var horisontalPadding = (this._container.width - this._resizeConstraint.side) / 2 + dashedBorderWidth;
+      var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
+
+      // Запишем координату верхнего края желтой линии перед изменением
+      var yellowBorderTopY = leftTopXY - dashedBorderWidth / 2;
+
+      // Спозиционируемся на середине наибольшего паддинга с обоих углов
+      leftTopXY -= dashedBorderWidth / 2 + maxContainerPadding / 2;
+      rightBottomXY += dashedBorderWidth + maxContainerPadding;
+
+      this._ctx.lineWidth = maxContainerPadding;
+
+      // Отрисуем рамку
+      this._ctx.setLineDash([15, 0]);
+      this._ctx.strokeStyle = 'rgba(0,0,0,.8)';
+      this._ctx.strokeRect(leftTopXY, leftTopXY, rightBottomXY, rightBottomXY);
+
+      // Отрисуем текст над желтой рамкой
+      var message = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
+      this._ctx.font = '30px Calibri';
+      this._ctx.fillStyle = '#ffffff';
+      this._ctx.textAlign = 'center';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.fillText(message, 0, yellowBorderTopY - 10);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
