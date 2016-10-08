@@ -113,38 +113,21 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      var dashedBorderWidth = this._ctx.lineWidth;
-      var leftTopXY = (-this._resizeConstraint.side / 2) - dashedBorderWidth / 2;
-      var rightBottomXY = this._resizeConstraint.side - dashedBorderWidth / 2;
+      var containerDimensions = [this._container.width, this._container.height];
+      var imageDimensions = [this._image.naturalWidth, this._image.naturalHeight];
+      var constraintSide = this._resizeConstraint.side;
 
-      this._ctx.strokeRect(leftTopXY, leftTopXY, rightBottomXY, rightBottomXY);
+      var framingBorderThickness = this._ctx.lineWidth;
+      var framingBorderBasePoint = [(-constraintSide / 2) - framingBorderThickness / 2,
+                                    (-constraintSide / 2) - framingBorderThickness / 2];
 
-      // Найдем наибольшее расстояние от желтой рамки до края контейнера
-      var verticalPadding = (this._container.height - this._resizeConstraint.side) / 2 + dashedBorderWidth;
-      var horisontalPadding = (this._container.width - this._resizeConstraint.side) / 2 + dashedBorderWidth;
-      var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
+      var framingBorderWidth = constraintSide - framingBorderThickness / 2;
+      var framingBorderHeight = constraintSide - framingBorderThickness / 2;
 
-      // Запишем координату верхнего края желтой линии перед изменением
-      var yellowBorderTopY = leftTopXY - dashedBorderWidth / 2;
+      this._ctx.strokeRect(framingBorderBasePoint[0], framingBorderBasePoint[1], framingBorderWidth, framingBorderHeight);
 
-      // Спозиционируемся на середине наибольшего паддинга с обоих углов
-      leftTopXY -= dashedBorderWidth / 2 + maxContainerPadding / 2;
-      rightBottomXY += dashedBorderWidth + maxContainerPadding;
-
-      this._ctx.lineWidth = maxContainerPadding;
-
-      // Отрисуем рамку
-      this._ctx.setLineDash([15, 0]);
-      this._ctx.strokeStyle = 'rgba(0,0,0,.8)';
-      this._ctx.strokeRect(leftTopXY, leftTopXY, rightBottomXY, rightBottomXY);
-
-      // Отрисуем текст над желтой рамкой
-      var message = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
-      this._ctx.font = '30px Calibri';
-      this._ctx.fillStyle = '#ffffff';
-      this._ctx.textAlign = 'center';
-      this._ctx.textBaseline = 'bottom';
-      this._ctx.fillText(message, 0, yellowBorderTopY - 10);
+      drawDarkLayer(this._ctx);
+      drawImageDimensionsText(this._ctx);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -153,6 +136,38 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+
+      // Отрисовка темного слоя вокруг внутренней рамки
+      function drawDarkLayer(context) {
+        // Найдем наибольшее расстояние от внутренней рамки до края контейнера
+        var horisontalPadding = (containerDimensions[0] - constraintSide) / 2 + framingBorderThickness;
+        var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + framingBorderThickness;
+        var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
+
+        // Спозиционируемся на середине наибольшего паддинга с обоих углов
+        var basePoint = [framingBorderBasePoint[0] - framingBorderThickness / 2 - maxContainerPadding / 2,
+                         framingBorderBasePoint[1] - framingBorderThickness / 2 - maxContainerPadding / 2];
+
+        var width = framingBorderWidth + framingBorderThickness + maxContainerPadding;
+        var height = framingBorderHeight + framingBorderThickness + maxContainerPadding;
+
+        context.lineWidth = maxContainerPadding;
+
+        // Отрисуем рамку
+        context.setLineDash([15, 0]);
+        context.strokeStyle = 'rgba(0,0,0,.8)';
+        context.strokeRect(basePoint[0], basePoint[1], width, height);
+      }
+
+      // Отрисовка текста над верхней гранью внутренней рамки
+      function drawImageDimensionsText(context) {
+        var message = imageDimensions[0] + ' x ' + imageDimensions[1];
+        context.font = '30px Calibri';
+        context.fillStyle = '#ffffff';
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom';
+        context.fillText(message, 0, framingBorderBasePoint[1] - 10);
+      }
     },
 
     /**

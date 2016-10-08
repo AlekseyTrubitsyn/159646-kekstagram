@@ -25,7 +25,7 @@ window.getMessage = function getMessage(a, b) {
       return (currentItem * b[index]) + sum;
     }, 0);
 
-    return 'Общая площадь артеф актов сжатия: ' + artifactsSquare + ' пикселей';
+    return 'Общая площадь артефактов сжатия: ' + artifactsSquare + ' пикселей';
   }
 
   return 'Переданы некорректные данные';
