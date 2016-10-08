@@ -111,12 +111,13 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования. Координаты задаются от центра.
+      // Запишем базовые параметры в переменные
       var containerDimensions = [this._container.width, this._container.height];
       var imageDimensions = [this._image.naturalWidth, this._image.naturalHeight];
       var constraintSide = this._resizeConstraint.side;
 
+      // Отрисовка прямоугольника, обозначающего область изображения после
+      // кадрирования. Координаты задаются от центра.
       var framingBorderThickness = this._ctx.lineWidth;
       var framingBorderBasePoint = [(-constraintSide / 2) - framingBorderThickness / 2,
                                     (-constraintSide / 2) - framingBorderThickness / 2];
@@ -144,7 +145,7 @@
         var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + framingBorderThickness;
         var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
 
-        // Спозиционируемся на середине наибольшего паддинга с обоих углов
+        // Спозиционируем левую верхнюю точку на середине наибольшего паддинга
         var basePoint = [framingBorderBasePoint[0] - framingBorderThickness / 2 - maxContainerPadding / 2,
                          framingBorderBasePoint[1] - framingBorderThickness / 2 - maxContainerPadding / 2];
 
