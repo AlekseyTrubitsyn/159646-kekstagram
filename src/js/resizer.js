@@ -119,16 +119,16 @@
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       var framingBorderThickness = this._ctx.lineWidth;
-      var framingBorderBasePoint = [(-constraintSide / 2) - framingBorderThickness / 2,
-                                    (-constraintSide / 2) - framingBorderThickness / 2];
+      var framingBorderCoordinates = [(-constraintSide / 2) - framingBorderThickness / 2,
+                                      (-constraintSide / 2) - framingBorderThickness / 2];
 
       var framingBorderWidth = constraintSide - framingBorderThickness / 2;
       var framingBorderHeight = constraintSide - framingBorderThickness / 2;
 
-      this._ctx.strokeRect(framingBorderBasePoint[0], framingBorderBasePoint[1], framingBorderWidth, framingBorderHeight);
+      this._ctx.strokeRect(framingBorderCoordinates[0], framingBorderCoordinates[1], framingBorderWidth, framingBorderHeight);
 
-      drawDarkLayer(this._ctx);
-      drawImageDimensionsText(this._ctx);
+      drawSurroundingBorder(this._ctx);
+      drawText(this._ctx);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -139,15 +139,15 @@
       this._ctx.restore();
 
       // Отрисовка темного слоя вокруг внутренней рамки
-      function drawDarkLayer(context) {
+      function drawSurroundingBorder(context) {
         // Найдем наибольшее расстояние от внутренней рамки до края контейнера
         var horisontalPadding = (containerDimensions[0] - constraintSide) / 2 + framingBorderThickness;
         var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + framingBorderThickness;
         var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
 
         // Спозиционируем левую верхнюю точку на середине наибольшего паддинга
-        var basePoint = [framingBorderBasePoint[0] - framingBorderThickness / 2 - maxContainerPadding / 2,
-                         framingBorderBasePoint[1] - framingBorderThickness / 2 - maxContainerPadding / 2];
+        var coordinates = [framingBorderCoordinates[0] - framingBorderThickness / 2 - maxContainerPadding / 2,
+                           framingBorderCoordinates[1] - framingBorderThickness / 2 - maxContainerPadding / 2];
 
         var width = framingBorderWidth + framingBorderThickness + maxContainerPadding;
         var height = framingBorderHeight + framingBorderThickness + maxContainerPadding;
@@ -157,17 +157,17 @@
         // Отрисуем рамку
         context.setLineDash([15, 0]);
         context.strokeStyle = 'rgba(0,0,0,.8)';
-        context.strokeRect(basePoint[0], basePoint[1], width, height);
+        context.strokeRect(coordinates[0], coordinates[1], width, height);
       }
 
       // Отрисовка текста над верхней гранью внутренней рамки
-      function drawImageDimensionsText(context) {
+      function drawText(context) {
         var message = imageDimensions[0] + ' x ' + imageDimensions[1];
         context.font = '30px Calibri';
         context.fillStyle = '#ffffff';
         context.textAlign = 'center';
         context.textBaseline = 'bottom';
-        context.fillText(message, 0, framingBorderBasePoint[1] - 10);
+        context.fillText(message, 0, framingBorderCoordinates[1] - 10);
       }
     },
 
