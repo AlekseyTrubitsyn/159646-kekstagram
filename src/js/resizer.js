@@ -118,16 +118,16 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      var framingBorderThickness = this._ctx.lineWidth;
-      var framingBorderCoordinates = [(-constraintSide / 2) - framingBorderThickness / 2,
-                                      (-constraintSide / 2) - framingBorderThickness / 2];
+      var lineWidth = this._ctx.lineWidth;
+      var framingBorderCoordinates = [(-constraintSide / 2) - lineWidth / 2,
+                                      (-constraintSide / 2) - lineWidth / 2];
 
-      var framingBorderWidth = constraintSide - framingBorderThickness / 2;
-      var framingBorderHeight = constraintSide - framingBorderThickness / 2;
+      var framingBorderWidth = constraintSide - lineWidth / 2;
+      var framingBorderHeight = constraintSide - lineWidth / 2;
 
       this._ctx.strokeRect(framingBorderCoordinates[0], framingBorderCoordinates[1], framingBorderWidth, framingBorderHeight);
 
-      drawSurroundingBorder(this._ctx);
+      drawFrame(this._ctx);
       drawText(this._ctx);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
@@ -139,18 +139,18 @@
       this._ctx.restore();
 
       // Отрисовка темного слоя вокруг внутренней рамки
-      function drawSurroundingBorder(context) {
+      function drawFrame(context) {
         // Найдем наибольшее расстояние от внутренней рамки до края контейнера
-        var horisontalPadding = (containerDimensions[0] - constraintSide) / 2 + framingBorderThickness;
-        var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + framingBorderThickness;
+        var horisontalPadding = (containerDimensions[0] - constraintSide) / 2 + lineWidth;
+        var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + lineWidth;
         var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
 
         // Спозиционируем левую верхнюю точку на середине наибольшего паддинга
-        var coordinates = [framingBorderCoordinates[0] - framingBorderThickness / 2 - maxContainerPadding / 2,
-                           framingBorderCoordinates[1] - framingBorderThickness / 2 - maxContainerPadding / 2];
+        var coordinates = [framingBorderCoordinates[0] - lineWidth / 2 - maxContainerPadding / 2,
+                           framingBorderCoordinates[1] - lineWidth / 2 - maxContainerPadding / 2];
 
-        var width = framingBorderWidth + framingBorderThickness + maxContainerPadding;
-        var height = framingBorderHeight + framingBorderThickness + maxContainerPadding;
+        var width = framingBorderWidth + lineWidth + maxContainerPadding;
+        var height = framingBorderHeight + lineWidth + maxContainerPadding;
 
         context.lineWidth = maxContainerPadding;
 
