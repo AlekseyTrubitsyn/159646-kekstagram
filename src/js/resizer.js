@@ -111,13 +111,24 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+      // Запишем базовые параметры в переменные
+      var containerDimensions = [this._container.width, this._container.height];
+      var imageDimensions = [this._image.naturalWidth, this._image.naturalHeight];
+      var constraintSide = this._resizeConstraint.side;
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      var lineWidth = this._ctx.lineWidth;
+      var framingBorderCoordinates = [(-constraintSide / 2) - lineWidth / 2,
+                                      (-constraintSide / 2) - lineWidth / 2];
+
+      var framingBorderWidth = constraintSide - lineWidth / 2;
+      var framingBorderHeight = constraintSide - lineWidth / 2;
+
+      this._ctx.strokeRect(framingBorderCoordinates[0], framingBorderCoordinates[1], framingBorderWidth, framingBorderHeight);
+
+      drawFrame(this._ctx);
+      drawText(this._ctx);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -126,6 +137,38 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+
+      // Отрисовка темного слоя вокруг внутренней рамки
+      function drawFrame(context) {
+        // Найдем наибольшее расстояние от внутренней рамки до края контейнера
+        var horisontalPadding = (containerDimensions[0] - constraintSide) / 2 + lineWidth;
+        var verticalPadding = (containerDimensions[1] - constraintSide) / 2 + lineWidth;
+        var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
+
+        // Спозиционируем левую верхнюю точку на середине наибольшего паддинга
+        var coordinates = [framingBorderCoordinates[0] - lineWidth / 2 - maxContainerPadding / 2,
+                           framingBorderCoordinates[1] - lineWidth / 2 - maxContainerPadding / 2];
+
+        var width = framingBorderWidth + lineWidth + maxContainerPadding;
+        var height = framingBorderHeight + lineWidth + maxContainerPadding;
+
+        context.lineWidth = maxContainerPadding;
+
+        // Отрисуем рамку
+        context.setLineDash([15, 0]);
+        context.strokeStyle = 'rgba(0,0,0,.8)';
+        context.strokeRect(coordinates[0], coordinates[1], width, height);
+      }
+
+      // Отрисовка текста над верхней гранью внутренней рамки
+      function drawText(context) {
+        var message = imageDimensions[0] + ' x ' + imageDimensions[1];
+        context.font = '30px Calibri';
+        context.fillStyle = '#ffffff';
+        context.textAlign = 'center';
+        context.textBaseline = 'bottom';
+        context.fillText(message, 0, framingBorderCoordinates[1] - 10);
+      }
     },
 
     /**
