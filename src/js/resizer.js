@@ -136,7 +136,7 @@
       // 0 0 находится в левом верхнем углу холста, в противном случае
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
-      this._ctx.restore(this._ctx);
+      this._ctx.restore();
 
       function drawDots() {
         var coordinates = [framingBorderCoordinates[0] + 1, framingBorderCoordinates[1] + 1];
