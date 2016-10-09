@@ -138,39 +138,63 @@
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
 
+      // Отрисовка рамки в виде точкек
       function drawDots() {
-        var coordinates = [framingBorderCoordinates[0] + 1, framingBorderCoordinates[1] + 1];
-        var rightLimit = framingBorderCoordinates[0] + framingBorderWidth - lineWidth * 2;
-        var bottomLimit = framingBorderCoordinates[1] + framingBorderHeight - lineWidth * 2;
-        var leftLimit = framingBorderCoordinates[0] + 1;
-        var topLimit = framingBorderCoordinates[1];
-        var shift = 15;
 
-        while(coordinates[0] < rightLimit) {
-          drawDot(coordinates);
-          coordinates[0] += shift;
+        // Найдем количество точек с оптмимальным расстоянием между ними
+        var shift = 12;
+        var minDeviation = 1;
+        var pointsQuantity = 1;
+
+        for (var testShift = 50; testShift >= 1; testShift--) {
+          var testPointsQuantity = (constraintSide - lineWidth * 2 - testShift)/(lineWidth + testShift);
+          var testPointsQuantityFloored = Math.floor(testPointsQuantity);
+          var deviation = testPointsQuantity - testPointsQuantityFloored;
+
+          if (deviation < minDeviation) {
+            minDeviation = deviation;
+            shift = testShift;
+            pointsQuantity = testPointsQuantityFloored;
+          }
         }
 
-        while(coordinates[1] < bottomLimit) {
-          drawDot(coordinates);
-          coordinates[1] += shift;
+        // Вычислим расположение и отрисуем угловые точки: так наши линии всегда
+        // будут примыкать к граням внешней (в данном случае темной) границы
+        var leftTopDotCoordinates = framingBorderCoordinates;
+        var rigthTopDotCoordinates = [framingBorderCoordinates[0] + framingBorderWidth, framingBorderCoordinates[1]];
+        var rigthBottomDotCoordinates = [rigthTopDotCoordinates[0], framingBorderCoordinates[1] + framingBorderHeight];
+        var leftBottomDotCoordinates = [leftTopDotCoordinates[0],rigthBottomDotCoordinates[1]];
+
+        drawDot(leftTopDotCoordinates);
+        drawDot(rigthTopDotCoordinates);
+        drawDot(rigthBottomDotCoordinates);
+        drawDot(leftBottomDotCoordinates);
+
+        // Выставим положение первой точки для новой горизонтальной линии:
+        // середина левой верхней плюс ее ширина и отступ
+        var coordinates = [leftTopDotCoordinates[0] + lineWidth + shift, leftTopDotCoordinates[1]];
+
+        // Одновременно рисуем точки по верхней и нижней линии
+        for (var i = 1; i <= pointsQuantity; i++) {
+          drawDot([coordinates[0], leftTopDotCoordinates[1]]);
+          drawDot([coordinates[0], leftBottomDotCoordinates[1]]);
+          coordinates[0] += shift + lineWidth;
         }
 
-        while(coordinates[0] > leftLimit) {
-          drawDot(coordinates);
-          coordinates[0] -= shift;
-        }
+        coordinates = [leftTopDotCoordinates[0], leftTopDotCoordinates[1] + lineWidth + shift];
 
-        while(coordinates[1] > topLimit) {
-          drawDot(coordinates);
-          coordinates[1] -= shift;
+        // Одновременно рисуем точки по левой и правой линии
+        for (var i = 1; i <= pointsQuantity; i++) {
+          drawDot([leftTopDotCoordinates[0], coordinates[1]]);
+          drawDot([rigthTopDotCoordinates[0], coordinates[1]]);
+          coordinates[1] += shift + lineWidth;
         }
       }
 
       // Отрисовка круга по координатам
       function drawDot(coordinates) {
         context.beginPath();
-        context.arc(coordinates[0], coordinates[1], lineWidth - 2, 0, Math.PI * 2, true);
+        context.arc(coordinates[0], coordinates[1], lineWidth, 0, Math.PI * 2, true);
         context.fillStyle = '#ffe753';
         context.fill();
       }
@@ -183,11 +207,11 @@
         var maxContainerPadding = Math.max(verticalPadding, horisontalPadding);
 
         // Спозиционируем левую верхнюю точку на середине наибольшего паддинга
-        var coordinates = [framingBorderCoordinates[0] - lineWidth / 2 - maxContainerPadding / 2,
-                           framingBorderCoordinates[1] - lineWidth / 2 - maxContainerPadding / 2];
+        var coordinates = [framingBorderCoordinates[0] - lineWidth - maxContainerPadding / 2,
+                           framingBorderCoordinates[1] - lineWidth - maxContainerPadding / 2];
 
-        var width = framingBorderWidth + lineWidth + maxContainerPadding;
-        var height = framingBorderHeight + lineWidth + maxContainerPadding;
+        var width = framingBorderWidth + lineWidth * 2 + maxContainerPadding;
+        var height = framingBorderHeight + lineWidth * 2 + maxContainerPadding;
 
         context.lineWidth = maxContainerPadding;
 
