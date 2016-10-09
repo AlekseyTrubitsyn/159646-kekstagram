@@ -147,7 +147,7 @@
         var pointsQuantity = 1;
 
         for (var testShift = 50; testShift >= 1; testShift--) {
-          var testPointsQuantity = (constraintSide - lineWidth * 2 - testShift)/(lineWidth + testShift);
+          var testPointsQuantity = (constraintSide - lineWidth * 2 - testShift) / (lineWidth + testShift);
           var testPointsQuantityFloored = Math.floor(testPointsQuantity);
           var deviation = testPointsQuantity - testPointsQuantityFloored;
 
@@ -163,7 +163,7 @@
         var leftTopDotCoordinates = framingBorderCoordinates;
         var rigthTopDotCoordinates = [framingBorderCoordinates[0] + framingBorderWidth, framingBorderCoordinates[1]];
         var rigthBottomDotCoordinates = [rigthTopDotCoordinates[0], framingBorderCoordinates[1] + framingBorderHeight];
-        var leftBottomDotCoordinates = [leftTopDotCoordinates[0],rigthBottomDotCoordinates[1]];
+        var leftBottomDotCoordinates = [leftTopDotCoordinates[0], rigthBottomDotCoordinates[1]];
 
         drawDot(leftTopDotCoordinates);
         drawDot(rigthTopDotCoordinates);
@@ -184,7 +184,7 @@
         coordinates = [leftTopDotCoordinates[0], leftTopDotCoordinates[1] + lineWidth + shift];
 
         // Одновременно рисуем точки по левой и правой линии
-        for (var i = 1; i <= pointsQuantity; i++) {
+        for (var j = 1; j <= pointsQuantity; j++) {
           drawDot([leftTopDotCoordinates[0], coordinates[1]]);
           drawDot([rigthTopDotCoordinates[0], coordinates[1]]);
           coordinates[1] += shift + lineWidth;
