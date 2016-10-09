@@ -89,7 +89,7 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 5;
       // Цвет обводки.
       this._ctx.strokeStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
@@ -141,12 +141,12 @@
       // Отрисовка рамки в виде точкек
       function drawDots() {
 
-        // Найдем количество точек с оптмимальным расстоянием между ними
+        // Найдем количество точек с оптимальным расстоянием между ними
         var shift = 12;
         var minDeviation = 1;
         var pointsQuantity = 1;
 
-        for (var testShift = 50; testShift >= 1; testShift--) {
+        for (var testShift = 25; testShift >= 1; testShift--) {
           var testPointsQuantity = (constraintSide - lineWidth * 2 - testShift) / (lineWidth + testShift);
           var testPointsQuantityFloored = Math.floor(testPointsQuantity);
           var deviation = testPointsQuantity - testPointsQuantityFloored;
