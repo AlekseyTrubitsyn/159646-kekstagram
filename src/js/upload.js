@@ -116,19 +116,25 @@
   var uploadMessage = document.querySelector('.upload-message');
 
   /**
-   * Поле ввода ширины ("Слева").
+   * Поле ввода координаты угла кадра
+   * по горизонтали ("Слева").
+   *
    * @type {HTMLFormElement}
    */
   var widthController = document.querySelector('#resize-x');
 
   /**
-   * Поле ввода высоты ("Сверху").
+   * Поле ввода координаты угла кадра
+   * по вертикали ("Сверху").
+   *
    * @type {HTMLFormElement}
    */
   var heightController = document.querySelector('#resize-y');
 
   /**
-   * Поле ввода размера стороны.
+   * Поле ввода размера стороны квадрата,
+   * который будет вырезан из изображения.
+   *
    * @type {HTMLFormElement}
    */
   var sideController = document.querySelector('#resize-size');
