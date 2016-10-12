@@ -72,6 +72,18 @@
    * @return {boolean}
    */
   var resizeFormIsValid = function() {
+    var x = +widthController.value;
+    var y = +heightController.value;
+    var size = +sideController.value;
+
+    var wrongWidth = (x + size) > currentResizer._image.naturalWidth;
+    var wrongHeight = (y + size) > currentResizer._image.naturalHeight;
+
+    if ((y < 0) || (x < 0) || wrongWidth || wrongHeight) {
+      forwardButton.disabled = true;
+      return false;
+    }
+    forwardButton.disabled = false;
     return true;
   };
 
@@ -102,6 +114,30 @@
    * @type {HTMLElement}
    */
   var uploadMessage = document.querySelector('.upload-message');
+
+  /**
+   * Поле ввода ширины ("Слева").
+   * @type {HTMLFormElement}
+   */
+   var widthController = document.querySelector('#resize-x');
+
+  /**
+   * Поле ввода высоты ("Сверху").
+   * @type {HTMLFormElement}
+   */
+   var heightController = document.querySelector('#resize-y');
+
+  /**
+   * Поле ввода размера стороны.
+   * @type {HTMLFormElement}
+   */
+   var sideController = document.querySelector('#resize-size');
+
+  /**
+   * Кнопка вперед.
+   * @type {HTMLFormElement}
+   */
+   var forwardButton = document.querySelector('#resize-fwd');
 
   /**
    * @param {Action} action
@@ -163,12 +199,30 @@
         };
 
         fileReader.readAsDataURL(element.files[0]);
+
+        // Пропишем минимальные значения без доп проверок
+        widthController.min = 0;
+        heightController.min = 0;
+        sideController.min = 0;
       } else {
         // Показ сообщения об ошибке, если формат загружаемого файла не поддерживается
         showMessage(Action.ERROR);
       }
     }
   };
+
+  // Проверим данные на валидность сразу при вводе.
+  widthController.oninput = function(evt) {
+    resizeFormIsValid();
+  }
+
+  heightController.oninput = function(evt) {
+    resizeFormIsValid();
+  }
+
+  sideController.oninput = function(evt) {
+    resizeFormIsValid();
+  }
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
