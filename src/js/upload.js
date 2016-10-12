@@ -119,25 +119,25 @@
    * Поле ввода ширины ("Слева").
    * @type {HTMLFormElement}
    */
-   var widthController = document.querySelector('#resize-x');
+  var widthController = document.querySelector('#resize-x');
 
   /**
    * Поле ввода высоты ("Сверху").
    * @type {HTMLFormElement}
    */
-   var heightController = document.querySelector('#resize-y');
+  var heightController = document.querySelector('#resize-y');
 
   /**
    * Поле ввода размера стороны.
    * @type {HTMLFormElement}
    */
-   var sideController = document.querySelector('#resize-size');
+  var sideController = document.querySelector('#resize-size');
 
   /**
    * Кнопка вперед.
    * @type {HTMLFormElement}
    */
-   var forwardButton = document.querySelector('#resize-fwd');
+  var forwardButton = document.querySelector('#resize-fwd');
 
   /**
    * @param {Action} action
@@ -212,17 +212,17 @@
   };
 
   // Проверим данные на валидность сразу при вводе.
-  widthController.oninput = function(evt) {
+  widthController.oninput = function() {
     resizeFormIsValid();
-  }
+  };
 
-  heightController.oninput = function(evt) {
+  heightController.oninput = function() {
     resizeFormIsValid();
-  }
+  };
 
-  sideController.oninput = function(evt) {
+  sideController.oninput = function() {
     resizeFormIsValid();
-  }
+  };
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
