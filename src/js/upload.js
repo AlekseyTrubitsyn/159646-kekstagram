@@ -161,10 +161,6 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    if (!currentResizer) {
-      return false;
-    }
-
     var x = parseInt(widthController.value, 10);
     var y = parseInt(heightController.value, 10);
     var size = parseInt(sideController.value, 10);
@@ -175,25 +171,29 @@
     var heightIsCorrect = (y + size) <= currentResizer._image.naturalHeight;
 
     if (typesAreCorrect && valuesArePositive && widthIsCorrect && heightIsCorrect) {
-      forwardButton.disabled = false;
       return true;
     }
 
-    forwardButton.disabled = true;
     return false;
+  }
+
+  function checkValuesSetAvailability() {
+    if (currentResizer) {
+      forwardButton.disabled = !resizeFormIsValid();
+    }
   }
 
   // Проверим данные на валидность сразу при вводе.
   widthController.addEventListener('input', function() {
-    resizeFormIsValid();
+    checkValuesSetAvailability();
   });
 
   heightController.addEventListener('input', function() {
-    resizeFormIsValid();
+    checkValuesSetAvailability();
   });
 
   sideController.addEventListener('input', function() {
-    resizeFormIsValid();
+    checkValuesSetAvailability();
   });
 
   /**
