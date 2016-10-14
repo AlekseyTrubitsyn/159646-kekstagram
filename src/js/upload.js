@@ -146,7 +146,7 @@
    *
    * @type {HTMLFormElement}
    */
-  var sideController = document.querySelector('#resize-size');
+  var sizeController = document.querySelector('#resize-size');
 
   /**
    * Кнопка вперед.
@@ -179,7 +179,7 @@
 
   function checkValueX() {
     var x = parseInt(widthController.value, 10);
-    var size = parseInt(sideController.value, 10);
+    var size = parseInt(sizeController.value, 10);
 
     var widthIsWrong = (x + size) > currentResizer._image.naturalWidth;
     xValueIsOk = !(isNaN(x) || (x < 0) || widthIsWrong);
@@ -187,7 +187,7 @@
 
   function checkValueY() {
     var y = parseInt(heightController.value, 10);
-    var size = parseInt(sideController.value, 10);
+    var size = parseInt(sizeController.value, 10);
 
     var heightIsWrong = (y + size) > currentResizer._image.naturalHeight;
     yValueIsOk = !(isNaN(y) || (y < 0) || heightIsWrong);
@@ -196,7 +196,7 @@
   function checkValueSize() {
     var x = parseInt(widthController.value, 10);
     var y = parseInt(heightController.value, 10);
-    var size = parseInt(sideController.value, 10);
+    var size = parseInt(sizeController.value, 10);
 
     var widthIsWrong = (x + size) > currentResizer._image.naturalWidth;
     var heightIsWrong = (y + size) > currentResizer._image.naturalHeight;
@@ -216,7 +216,7 @@
     forwardButton.disabled = !resizeFormIsValid();
   });
 
-  sideController.addEventListener('input', function() {
+  sizeController.addEventListener('input', function() {
     checkValueSize();
     forwardButton.disabled = !resizeFormIsValid();
   });
@@ -258,7 +258,7 @@
         // Пропишем минимальные значения без доп проверок
         widthController.min = 0;
         heightController.min = 0;
-        sideController.min = 0;
+        sizeController.min = 0;
 
       } else {
         // Показ сообщения об ошибке, если формат загружаемого файла не поддерживается
