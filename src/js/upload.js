@@ -155,45 +155,70 @@
    */
   var forwardButton = document.querySelector('#resize-fwd');
 
+  var xValueIsOk = false;
+  var yValueIsOk = false;
+  var sizeValueIsOk = false;
+
   /**
    * Проверяет, валидны ли данные, в форме кадрирования.
    *
    * @return {boolean}
    */
   function resizeFormIsValid() {
-    var x = parseInt(widthController.value, 10);
-    var y = parseInt(heightController.value, 10);
-    var size = parseInt(sideController.value, 10);
-
-    var typesAreCorrect = !(isNaN(x) || isNaN(y) || isNaN(size));
-    var valuesArePositive = !((y < 0) || (x < 0) || (size < 0));
-    var widthIsCorrect = (x + size) <= currentResizer._image.naturalWidth;
-    var heightIsCorrect = (y + size) <= currentResizer._image.naturalHeight;
-
-    if (typesAreCorrect && valuesArePositive && widthIsCorrect && heightIsCorrect) {
-      return true;
-    }
-
-    return false;
+    return xValueIsOk && yValueIsOk && sizeValueIsOk;
   }
 
   function checkValuesSetAvailability() {
     if (currentResizer) {
+      checkValueX();
+      checkValueY();
+      checkValueSize();
       forwardButton.disabled = !resizeFormIsValid();
     }
   }
 
+  function checkValueX() {
+    var x = parseInt(widthController.value, 10);
+    var size = parseInt(sideController.value, 10);
+
+    var widthIsWrong = (x + size) > currentResizer._image.naturalWidth;
+    xValueIsOk = !(isNaN(x) || (x < 0) || widthIsWrong);
+  }
+
+  function checkValueY() {
+    var y = parseInt(heightController.value, 10);
+    var size = parseInt(sideController.value, 10);
+
+    var heightIsWrong = (y + size) > currentResizer._image.naturalHeight;
+    yValueIsOk = !(isNaN(y) || (y < 0) || heightIsWrong);
+  }
+
+  function checkValueSize() {
+    var x = parseInt(widthController.value, 10);
+    var y = parseInt(heightController.value, 10);
+    var size = parseInt(sideController.value, 10);
+
+    var widthIsWrong = (x + size) > currentResizer._image.naturalWidth;
+    var heightIsWrong = (y + size) > currentResizer._image.naturalHeight;
+    var overflowed = widthIsWrong || heightIsWrong;
+
+    sizeValueIsOk = !(isNaN(size) || (size < 0) || overflowed);
+  }
+
   // Проверим данные на валидность сразу при вводе.
   widthController.addEventListener('input', function() {
-    checkValuesSetAvailability();
+    checkValueX();
+    forwardButton.disabled = !resizeFormIsValid();
   });
 
   heightController.addEventListener('input', function() {
-    checkValuesSetAvailability();
+    checkValueY();
+    forwardButton.disabled = !resizeFormIsValid();
   });
 
   sideController.addEventListener('input', function() {
-    checkValuesSetAvailability();
+    checkValueSize();
+    forwardButton.disabled = !resizeFormIsValid();
   });
 
   /**
@@ -224,6 +249,8 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
+
+          checkValuesSetAvailability();
         });
 
         fileReader.readAsDataURL(element.files[0]);
