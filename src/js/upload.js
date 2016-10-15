@@ -302,6 +302,8 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+
+      readFilterCookies();
     }
   });
 
@@ -326,6 +328,7 @@
 
     cleanupResizer();
     updateBackground();
+    writeFilterCookies();
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
@@ -336,6 +339,10 @@
    * выбранному значению в форме.
    */
   filterForm.addEventListener('change', function() {
+    changeFilter();
+  });
+
+  function changeFilter() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -356,7 +363,42 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  });
+  }
+
+  var Cookies = window.Cookies;
+  var FILTER_CONTROLS = '.upload-filter-controls';
+  var COOKIE_FILTER_KEY = 'upload-filter';
+
+  function writeFilterCookies() {
+    var selector = FILTER_CONTROLS + ' input:checked';
+    var filterValue = document.querySelector(selector).value;
+
+    Cookies.set(COOKIE_FILTER_KEY, filterValue, { expires: getCookiesExpiration() });
+  }
+
+  function readFilterCookies() {
+    var filterValue = Cookies.get(COOKIE_FILTER_KEY);
+
+    if (filterValue) {
+      var selector = FILTER_CONTROLS + ' input[value="' + filterValue + '"]';
+      document.querySelector(selector).checked = true;
+      changeFilter();
+    }
+  }
+
+  // День рождения Грейс Хоппер - 9 декабря 1906 года. Кэп
+  function getCookiesExpiration() {
+    var oneDayMilliseconds = 24 * 60 * 60 * 1000;
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var birthday = new Date(currentYear + '-12-09');
+
+    if (currentDate <= birthday) {
+      birthday.setFullYear(currentYear - 1);
+    }
+
+    return Math.round((currentDate.getTime() - birthday.getTime()) / oneDayMilliseconds);
+  }
 
   cleanupResizer();
   updateBackground();
