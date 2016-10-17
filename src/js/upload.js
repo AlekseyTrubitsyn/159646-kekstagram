@@ -338,9 +338,7 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.addEventListener('change', function() {
-    changeFilter();
-  });
+  filterForm.addEventListener('change', changeFilter);
 
   function changeFilter() {
     if (!filterMap) {
@@ -365,25 +363,31 @@
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   }
 
-  var Cookies = window.Cookies;
-  var FILTER_CONTROLS = '.upload-filter-controls';
-  var COOKIE_FILTER_KEY = 'upload-filter';
+  var cookies = window.Cookies;
 
   function writeFilterCookies() {
-    var selector = FILTER_CONTROLS + ' input:checked';
-    var filterValue = document.querySelector(selector).value;
+    var cookieFilterKey = 'upload-filter';
+    var form = document.forms['upload-filters'];
+    var filters = form.elements['upload-filter'];
+    var filterValue = filters.value;
 
-    Cookies.set(COOKIE_FILTER_KEY, filterValue, { expires: getCookiesExpiration() });
+    cookies.set(cookieFilterKey, filterValue, { expires: getCookiesExpiration() });
   }
 
   function readFilterCookies() {
-    var filterValue = Cookies.get(COOKIE_FILTER_KEY);
+    var cookieFilterKey = 'upload-filter';
+    var filterControls = '.upload-filter-controls';
+    var filterValue = cookies.get(cookieFilterKey);
 
-    if (filterValue) {
-      var selector = FILTER_CONTROLS + ' input[value="' + filterValue + '"]';
-      document.querySelector(selector).checked = true;
-      changeFilter();
+    if (!filterValue) {
+      return;
     }
+
+    var selector = filterControls + ' input[value="' + filterValue + '"]';
+    var filter = document.querySelector(selector);
+
+    filter.checked = true;
+    changeFilter();
   }
 
   // День рождения Грейс Хоппер - 9 декабря 1906 года. Кэп
@@ -391,7 +395,9 @@
     var oneDayMilliseconds = 24 * 60 * 60 * 1000;
     var currentDate = new Date();
     var currentYear = currentDate.getFullYear();
-    var birthday = new Date(currentYear + '-12-09');
+    var birthday = new Date(1906, 12, 9);
+
+    birthday.setFullYear(currentYear);
 
     if (currentDate <= birthday) {
       birthday.setFullYear(currentYear - 1);
