@@ -302,6 +302,8 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+
+      readFilterCookies();
     }
   });
 
@@ -326,6 +328,7 @@
 
     cleanupResizer();
     updateBackground();
+    writeFilterCookies();
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
@@ -335,7 +338,9 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.addEventListener('change', function() {
+  filterForm.addEventListener('change', changeFilter);
+
+  function changeFilter() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -356,7 +361,50 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  });
+  }
+
+  var cookies = window.Cookies;
+
+  function writeFilterCookies() {
+    var cookieFilterKey = 'upload-filter';
+    var form = document.forms['upload-filters'];
+    var filters = form.elements['upload-filter'];
+    var filterValue = filters.value;
+
+    cookies.set(cookieFilterKey, filterValue, { expires: getCookiesExpiration() });
+  }
+
+  function readFilterCookies() {
+    var cookieFilterKey = 'upload-filter';
+    var filterControls = '.upload-filter-controls';
+    var filterValue = cookies.get(cookieFilterKey);
+
+    if (!filterValue) {
+      return;
+    }
+
+    var selector = filterControls + ' input[value="' + filterValue + '"]';
+    var filter = document.querySelector(selector);
+
+    filter.checked = true;
+    changeFilter();
+  }
+
+  // День рождения Грейс Хоппер - 9 декабря 1906 года. Кэп
+  function getCookiesExpiration() {
+    var oneDayMilliseconds = 24 * 60 * 60 * 1000;
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var birthday = new Date(1906, 12, 9);
+
+    birthday.setFullYear(currentYear);
+
+    if (currentDate <= birthday) {
+      birthday.setFullYear(currentYear - 1);
+    }
+
+    return Math.round((currentDate.getTime() - birthday.getTime()) / oneDayMilliseconds);
+  }
 
   cleanupResizer();
   updateBackground();
