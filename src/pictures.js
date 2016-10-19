@@ -15,8 +15,8 @@ function unhideIt(element) {
 }
 
 function getPictureElement(pictureData) {
-  var container = templateContainer.querySelector('.picture');
-  var element = container.cloneNode(true);
+  var pictureElementTemplate = templateContainer.querySelector('.picture');
+  var element = pictureElementTemplate.cloneNode(true);
   var elementImage = element.querySelector('img');
 
   var contentImage = new Image();
