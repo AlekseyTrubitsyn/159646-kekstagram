@@ -12,13 +12,13 @@
   var IMAGE_HEIGHT = 182;
 
   var CALLBACK_NAME = '__jsonpCallback';
-  var url = 'http://localhost:1507/api/pictures?callback=';
+  var JSONP_URL = 'http://localhost:1507/api/pictures?callback=' + CALLBACK_NAME;
 
   var pictures = [];
 
   hide(filtersBlock);
 
-  load(url + CALLBACK_NAME, function(data){
+  load(JSONP_URL, function(data){
     pictures = data;
     renderPictures();
   });
