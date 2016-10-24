@@ -11,14 +11,13 @@
   var IMAGE_WIDTH = 182;
   var IMAGE_HEIGHT = 182;
 
-  var CALLBACK_NAME = '__jsonpCallback';
-  var JSONP_URL = 'http://localhost:1507/api/pictures?callback=' + CALLBACK_NAME;
-
-  var pictures = [];
-
   hide(filtersBlock);
 
-  load(JSONP_URL, function(data){
+  var pictures = [];
+  var picturesCallbackName = '__jsonpCallback';
+  var picturesUrl = 'http://localhost:1507/api/pictures?callback=' + picturesCallbackName;
+
+  load(picturesUrl, function(data){
     pictures = data;
     renderPictures();
   });
@@ -61,7 +60,7 @@
   };
 
   function load(url, callback) {
-    window[CALLBACK_NAME] = function(data) {
+    window[picturesCallbackName] = function(data) {
       callback(data);
     }
 
