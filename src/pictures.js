@@ -13,16 +13,13 @@
 
   hide(filtersBlock);
 
-  var pictures = [];
   var picturesCallbackName = '__jsonpCallback';
-  var picturesUrl = 'http://localhost:1507/api/pictures?callback=' + picturesCallbackName;
+  var picturesUrl = 'http://localhost:1507/api/pictures?callback=';
 
-  load(picturesUrl, function(data){
-    pictures = data;
-    renderPictures();
-  });
-
-  show(filtersBlock);
+  createRequestJSONP(picturesUrl, function(data){
+    renderPictures(data);
+    show(filtersBlock);
+  }, picturesCallbackName);
 
   function hide(element) {
     element.classList.add('hidden');
@@ -52,20 +49,20 @@
     return element;
   };
 
-  function renderPictures() {
+  function renderPictures(pictures) {
     pictures.forEach(function(picture) {
       var element = pictureElement(picture);
       picturesBlock.appendChild(element);
     });
   };
 
-  function load(url, callback) {
+  function createRequestJSONP(url, callback, callbackName) {
     window[picturesCallbackName] = function(data) {
       callback(data);
     }
 
     var script = document.createElement('script');
-    script.src = url;
+    script.src = url + callbackName;
     document.body.appendChild(script);
   };
 
