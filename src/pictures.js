@@ -57,7 +57,7 @@
   };
 
   function createRequestJSONP(url, callback, callbackName) {
-    window[picturesCallbackName] = function(data) {
+    window[callbackName] = function(data) {
       callback(data);
     }
 
