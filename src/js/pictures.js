@@ -6,23 +6,25 @@ define([
   './picture',
   './createRequestJSONP'
 ], function(hide, show, picture, createRequestJSONP) {
-  var filtersBlock = document.querySelector('.filters');
-  var picturesBlock = document.querySelector('.pictures');
+  return function() {
+    var filtersBlock = document.querySelector('.filters');
+    var picturesBlock = document.querySelector('.pictures');
 
-  hide(filtersBlock);
+    hide(filtersBlock);
 
-  var picturesCallbackName = '__jsonpCallback';
-  var picturesUrl = 'http://localhost:1507/api/pictures?callback=';
+    var picturesCallbackName = '__jsonpCallback';
+    var picturesUrl = 'http://localhost:1507/api/pictures?callback=';
 
-  createRequestJSONP(picturesUrl, function(data) {
-    renderPictures(data);
-    show(filtersBlock);
-  }, picturesCallbackName);
+    createRequestJSONP(picturesUrl, function(data) {
+      renderPictures(data);
+      show(filtersBlock);
+    }, picturesCallbackName);
 
-  function renderPictures(pictures) {
-    pictures.forEach(function(pictureData) {
-      var element = picture(pictureData);
-      picturesBlock.appendChild(element);
-    });
-  }
+    function renderPictures(pictures) {
+      pictures.forEach(function(pictureData) {
+        var element = picture(pictureData);
+        picturesBlock.appendChild(element);
+      });
+    }
+  };
 });
