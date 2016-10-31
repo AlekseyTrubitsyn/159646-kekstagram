@@ -1,7 +1,7 @@
 'use strict';
 
 define(function() {
-  return function(url, callback, callbackName) {
+  function createRequestJSONP(url, callback, callbackName) {
     window[callbackName] = function(data) {
       callback(data);
     };
@@ -9,5 +9,6 @@ define(function() {
     var script = document.createElement('script');
     script.src = url + callbackName;
     document.body.appendChild(script);
-  };
+  }
+  return createRequestJSONP;
 });

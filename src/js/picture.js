@@ -1,7 +1,7 @@
 'use strict';
 
 define(function() {
-  return function(pictureData) {
+  function createPictureElement(pictureData) {
     var pictureTemplate = document.querySelector('#picture-template');
     var templateContainer = 'content' in pictureTemplate ? pictureTemplate.content : pictureTemplate;
     var pictureElementTemplate = templateContainer.querySelector('.picture');
@@ -25,5 +25,7 @@ define(function() {
     contentImage.src = pictureData.url;
 
     return element;
-  };
+  }
+
+  return createPictureElement;
 });

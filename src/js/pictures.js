@@ -1,12 +1,10 @@
 'use strict';
 
 define([
-  './hide',
-  './show',
   './picture',
   './createRequestJSONP'
-], function(hide, show, picture, createRequestJSONP) {
-  return function() {
+], function(picture, createRequestJSONP) {
+  function createPictures() {
     var filtersBlock = document.querySelector('.filters');
     var picturesBlock = document.querySelector('.pictures');
 
@@ -26,5 +24,15 @@ define([
         picturesBlock.appendChild(element);
       });
     }
-  };
+  }
+
+  function hide(element) {
+    element.classList.remove('hidden');
+  }
+
+  function show(element) {
+    element.classList.remove('hidden');
+  }
+
+  return createPictures;
 });
