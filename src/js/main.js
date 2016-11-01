@@ -1,6 +1,7 @@
 'use strict';
 
 define(['./load', './picture', './resizer', './upload'], function(load, picture) {
+
   var filtersBlock = document.querySelector('.filters');
 
   hide(filtersBlock);
@@ -15,8 +16,12 @@ define(['./load', './picture', './resizer', './upload'], function(load, picture)
 
   function renderPictures(pictures) {
     var picturesBlock = document.querySelector('.pictures');
+    var pictureTemplate = document.querySelector('#picture-template');
+    var templateContainer = 'content' in pictureTemplate ? pictureTemplate.content : pictureTemplate;
+    var pictureElementTemplate = templateContainer.querySelector('.picture');
+
     pictures.forEach(function(pictureData) {
-      var element = picture(pictureData);
+      var element = picture(pictureData, pictureElementTemplate);
       picturesBlock.appendChild(element);
     });
   }
