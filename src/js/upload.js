@@ -1,13 +1,13 @@
 /* global Resizer: true */
 
 /**
- * @fileoverview
- * @author Igor Alexeenko (o0)
- */
+* @fileoverview
+* @author Igor Alexeenko (o0)
+*/
 
 'use strict';
 
-(function() {
+define(function() {
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -408,4 +408,4 @@
 
   cleanupResizer();
   updateBackground();
-})();
+});
