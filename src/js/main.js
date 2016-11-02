@@ -16,12 +16,9 @@ define(['./load', './picture', './resizer', './upload'], function(load, picture)
 
   function renderPictures(pictures) {
     var picturesBlock = document.querySelector('.pictures');
-    var pictureTemplate = document.querySelector('#picture-template');
-    var templateContainer = 'content' in pictureTemplate ? pictureTemplate.content : pictureTemplate;
-    var pictureElementTemplate = templateContainer.querySelector('.picture');
 
     pictures.forEach(function(pictureData) {
-      var element = picture(pictureData, pictureElementTemplate);
+      var element = picture(pictureData);
       picturesBlock.appendChild(element);
     });
   }

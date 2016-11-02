@@ -1,7 +1,11 @@
 'use strict';
 
 define(function() {
-  function createPictureElement(pictureData, pictureElementTemplate) {
+  var pictureTemplate = document.querySelector('#picture-template');
+  var templateContainer = 'content' in pictureTemplate ? pictureTemplate.content : pictureTemplate;
+  var pictureElementTemplate = templateContainer.querySelector('.picture');
+
+  function createPictureElement(pictureData) {
     var element = pictureElementTemplate.cloneNode(true);
     var elementImage = element.querySelector('img');
     var contentImage = new Image();
