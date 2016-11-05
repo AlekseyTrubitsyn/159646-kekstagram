@@ -10,11 +10,13 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   var picturesUrl = '/api/pictures?callback=';
   var gallery = new Gallery();
 
-  load(picturesUrl, function(data) {
+  load(picturesUrl, loadCallback, picturesCallbackName);
+
+  function loadCallback(data) {
     renderPictures(data);
     show(filtersBlock);
     gallery.setPictures(data);
-  }, picturesCallbackName);
+  }
 
   function renderPictures(pictures) {
     var picturesBlock = document.querySelector('.pictures');

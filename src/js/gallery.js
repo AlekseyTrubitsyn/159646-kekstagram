@@ -34,7 +34,6 @@ define(function() {
   };
 
   Gallery.prototype.nextPicture = function() {
-    this.setActivePicture = this.setActivePicture.bind(this);
     this.setActivePicture(this.activePicture + 1);
   };
 
@@ -43,7 +42,7 @@ define(function() {
 
     var picture = this.pictures[this.activePicture];
     this.overlayImage.src = picture.url;
-    this.likes.innerText = picture.likes;
+    this.likes.textContent = picture.likes;
     this.comments.innerText = picture.comments;
   };
 
