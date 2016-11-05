@@ -43,7 +43,7 @@ define(function() {
     var picture = this.pictures[this.activePicture];
     this.overlayImage.src = picture.url;
     this.likes.textContent = picture.likes;
-    this.comments.innerText = picture.comments;
+    this.comments.textContent = picture.comments;
   };
 
   return Gallery;
