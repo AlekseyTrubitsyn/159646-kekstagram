@@ -28,25 +28,5 @@ define(function() {
     return element;
   }
 
-  function Picture(data, gallery, number) {
-    this.data = data;
-    this.gallery = gallery;
-    this.number = number;
-
-    this.element = createPictureElement(this.data);
-
-    this.show = this.show.bind(this);
-    this.element.addEventListener('click', this.show);
-  }
-
-  Picture.prototype.show = function(event) {
-    event.preventDefault();
-    this.gallery.show(this.number);
-  };
-
-  Picture.prototype.remove = function() {
-    this.element.removeEventListener('click', this.show);
-  };
-
-  return Picture;
+  return createPictureElement;
 });
