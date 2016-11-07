@@ -1,24 +1,32 @@
 'use strict';
 
-define(['./load', './picture', './resizer', './upload'], function(load, picture) {
+define(['./load', './picture', './gallery', './resizer', './upload'], function(load, picture, Gallery) {
 
   var filtersBlock = document.querySelector('.filters');
 
   hide(filtersBlock);
 
   var picturesCallbackName = '__jsonpCallback';
-  var picturesUrl = 'http://localhost:1507/api/pictures?callback=';
+  var picturesUrl = '/api/pictures?callback=';
+  var gallery = new Gallery();
 
-  load(picturesUrl, function(data) {
+  load(picturesUrl, loadCallback, picturesCallbackName);
+
+  function loadCallback(data) {
     renderPictures(data);
     show(filtersBlock);
-  }, picturesCallbackName);
+    gallery.setPictures(data);
+  }
 
   function renderPictures(pictures) {
     var picturesBlock = document.querySelector('.pictures');
 
-    pictures.forEach(function(pictureData) {
+    pictures.forEach(function(pictureData, index) {
       var element = picture(pictureData);
+      element.addEventListener('click', function(event) {
+        event.preventDefault();
+        gallery.show(index);
+      });
       picturesBlock.appendChild(element);
     });
   }
