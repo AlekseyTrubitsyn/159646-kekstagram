@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load', './picture', './gallery', './resizer', './upload'], function(load, picture, Gallery) {
+define(['./load', './picture', './gallery', './resizer', './upload'], function(load, Picture, Gallery) {
 
   var filtersBlock = document.querySelector('.filters');
 
@@ -22,12 +22,8 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     var picturesBlock = document.querySelector('.pictures');
 
     pictures.forEach(function(pictureData, index) {
-      var element = picture(pictureData);
-      element.addEventListener('click', function(event) {
-        event.preventDefault();
-        gallery.show(index);
-      });
-      picturesBlock.appendChild(element);
+      var picture = new Picture(pictureData, gallery, index);
+      picturesBlock.appendChild(picture.element);
     });
   }
 
