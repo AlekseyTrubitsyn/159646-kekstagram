@@ -6,11 +6,39 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   hide(filtersBlock);
 
-  var picturesCallbackName = '__jsonpCallback';
-  var picturesUrl = '/api/pictures?callback=';
+  var picturesUrl = '/api/pictures';
   var gallery = new Gallery();
 
-  load(picturesUrl, loadCallback, picturesCallbackName);
+  var pageNumber = 0;
+  var pageSize = 12;
+  var currentFilter = '';
+  var params = {
+    from: pageNumber * pageSize,
+    to: pageNumber * pageSize + pageSize,
+    filter: currentFilter
+  };
+
+  load(picturesUrl, params, loadCallback);
+
+  var footer = document.querySelector('.footer');
+  var scrollingGap = 100;
+  var throttleTimeout = 100;
+  var lastCall = Date.now();
+
+  window.addEventListener('scroll', function() {
+    if (Date.now() - lastCall >= throttleTimeout) {
+      var clientRect = footer.getBoundingClientRect();
+      var bottomDelta = clientRect.bottom - window.innerHeight;
+
+      if (bottomDelta <= scrollingGap) {
+        params.from = ++pageNumber * pageSize;
+        params.to = params.from + pageSize;
+
+        load(picturesUrl, params, loadCallback);
+      }
+      lastCall = Date.now();
+    }
+  });
 
   function loadCallback(data) {
     renderPictures(data);
