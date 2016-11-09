@@ -22,7 +22,6 @@ define(function() {
     });
 
     xhr.open('GET', url + '?' + getSearchString(params));
-    console.log(getSearchString(params));
     xhr.send();
   }
 

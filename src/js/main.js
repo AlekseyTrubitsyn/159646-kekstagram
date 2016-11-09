@@ -11,7 +11,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   var pageNumber = 0;
   var pageSize = 12;
-  var currentFilter = '';
+  var currentFilter = 'filter-popular';
   var params = {
     from: pageNumber * pageSize,
     to: pageNumber * pageSize + pageSize,
@@ -46,13 +46,31 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     gallery.setPictures(data);
   }
 
-  function renderPictures(pictures) {
-    var picturesBlock = document.querySelector('.pictures');
+  var picturesBlock = document.querySelector('.pictures');
 
+  function renderPictures(pictures) {
     pictures.forEach(function(pictureData, index) {
       var picture = new Picture(pictureData, gallery, index);
       picturesBlock.appendChild(picture.element);
     });
+  }
+
+  filtersBlock.addEventListener('change', function(event) {
+    if(event.target.classList.contains('filters-radio')) {
+      setFilter(event.target.id);
+    }
+  });
+
+  function setFilter(filterId) {
+    picturesBlock.innerHTML = '';
+
+    pageNumber = 0;
+    currentFilter = filterId;
+    params.from = pageNumber;
+    params.to = pageNumber + pageSize;
+    params.filter = currentFilter;
+
+    load(picturesUrl, params, loadCallback);
   }
 
   function hide(element) {
