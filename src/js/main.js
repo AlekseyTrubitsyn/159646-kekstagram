@@ -25,25 +25,50 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   var throttleTimeout = 100;
   var lastCall = Date.now();
 
+  function isFooterVisible() {
+    var clientRect = footer.getBoundingClientRect();
+    var bottomDelta = clientRect.bottom - window.innerHeight;
+    return bottomDelta <= scrollingGap;
+  }
+
+  function showNextPage() {
+    if (isFooterVisible()) {
+      params.from = ++pageNumber * pageSize;
+      params.to = params.from + pageSize;
+
+      load(picturesUrl, params, loadCallback);
+    }
+    lastCall = Date.now();
+  }
+
   window.addEventListener('scroll', function() {
-    if (Date.now() - lastCall >= throttleTimeout) {
-      var clientRect = footer.getBoundingClientRect();
-      var bottomDelta = clientRect.bottom - window.innerHeight;
-
-      if (bottomDelta <= scrollingGap) {
-        params.from = ++pageNumber * pageSize;
-        params.to = params.from + pageSize;
-
-        load(picturesUrl, params, loadCallback);
-      }
-      lastCall = Date.now();
+    var isTimeoutEnded = Date.now() - lastCall >= throttleTimeout;
+    if (isTimeoutEnded) {
+      showNextPage();
     }
   });
+
+  //var loadedData = [];
+
+  // function loadCallback(data) {
+  //   loadedData = loadedData.concat(data);
+  //   renderPictures(loadedData);
+  //   show(filtersBlock);
+  //   gallery.setPictures(loadedData);
+  //
+  //   if (data.length === pageSize) {
+  //     showNextPage();
+  //   }
+  // }
 
   function loadCallback(data) {
     renderPictures(data);
     show(filtersBlock);
     gallery.setPictures(data);
+
+    if (data.length === pageSize) {
+      showNextPage();
+    }
   }
 
   var picturesBlock = document.querySelector('.pictures');
@@ -63,6 +88,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   function setFilter(filterId) {
     picturesBlock.innerHTML = '';
+    //loadedData = [];
 
     pageNumber = 0;
     currentFilter = filterId;

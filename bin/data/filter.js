@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = function(list, filterID) {
-  console.log(filterID);
   switch (filterID) {
     case 'filter-popular':
       return list.sort(function(a, b) {
