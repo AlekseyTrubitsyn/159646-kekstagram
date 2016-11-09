@@ -48,23 +48,13 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     }
   });
 
-  //var loadedData = [];
-
-  // function loadCallback(data) {
-  //   loadedData = loadedData.concat(data);
-  //   renderPictures(loadedData);
-  //   show(filtersBlock);
-  //   gallery.setPictures(loadedData);
-  //
-  //   if (data.length === pageSize) {
-  //     showNextPage();
-  //   }
-  // }
+  var loadedData = [];
 
   function loadCallback(data) {
-    renderPictures(data);
+    loadedData = loadedData.concat(data);
+    renderPictures(loadedData);
     show(filtersBlock);
-    gallery.setPictures(data);
+    gallery.setPictures(loadedData);
 
     if (data.length === pageSize) {
       showNextPage();
@@ -88,7 +78,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   function setFilter(filterId) {
     picturesBlock.innerHTML = '';
-    //loadedData = [];
+    loadedData = [];
 
     pageNumber = 0;
     currentFilter = filterId;
