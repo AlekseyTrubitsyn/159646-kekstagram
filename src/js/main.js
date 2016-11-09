@@ -18,20 +18,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     filter: currentFilter
   };
 
-  var originArraySize = 0;
-  setOriginArraySize();
-
   load(picturesUrl, params, loadCallback);
-
-  function setOriginArraySize() {
-    load(picturesUrl, {
-      from: 0,
-      to: Infinity,
-      filter: currentFilter
-    }, function(data) {
-      originArraySize = data.length;
-    });
-  }
 
   var footer = document.querySelector('.footer');
   var scrollingGap = 100;
@@ -45,7 +32,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   }
 
   function showNextPage() {
-    if (!isAllDataLoaded() && isFooterVisible()) {
+    if (isFooterVisible()) {
       params.from = ++pageNumber * pageSize;
       params.to = params.from + pageSize;
 
@@ -55,10 +42,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   }
 
   window.addEventListener('scroll', function() {
-    if (isAllDataLoaded()) {
-      return;
-    }
-
     var isTimeoutEnded = Date.now() - lastCall >= throttleTimeout;
     if (isTimeoutEnded) {
       showNextPage();
@@ -66,11 +49,9 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   });
 
   var loadedData = [];
-  var loadedQuantity = 0;
 
   function loadCallback(data) {
-    loadedQuantity += data.length;
-    if (isAllDataLoaded()) {
+    if (data.length === 0) {
       return;
     }
 
@@ -84,10 +65,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     if (data.length === pageSize) {
       showNextPage();
     }
-  }
-
-  function isAllDataLoaded() {
-    return originArraySize < loadedQuantity;
   }
 
   var picturesBlock = document.querySelector('.pictures');
@@ -108,7 +85,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   function setFilter(filterId) {
     picturesBlock.innerHTML = '';
     loadedData = [];
-    loadedQuantity = 0;
 
     pageNumber = 0;
     currentFilter = filterId;
@@ -116,7 +92,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     params.to = pageNumber + pageSize;
     params.filter = currentFilter;
 
-    setOriginArraySize();
     load(picturesUrl, params, loadCallback);
   }
 
