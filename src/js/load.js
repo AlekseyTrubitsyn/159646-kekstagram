@@ -10,14 +10,12 @@ define(function() {
   function load(url, params, callback) {
     var xhr = new XMLHttpRequest();
 
-    xhr.addEventListener('readystatechange', function(event) {
-      if (event.target.readyState === 4) {
-        try {
-          var data = JSON.parse(event.target.response);
-          callback(data);
-        } catch(error) {
-          console.log(error);
-        }
+    xhr.addEventListener('load', function(event) {
+      try {
+        var data = JSON.parse(event.target.response);
+        callback(data);
+      } catch(error) {
+        console.log(error);
       }
     });
 
