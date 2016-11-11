@@ -3,6 +3,8 @@
 define(['./load', './picture', './gallery', './resizer', './upload'], function(load, Picture, Gallery) {
 
   var filtersBlock = document.querySelector('.filters');
+  var picturesBlock = document.querySelector('.pictures');
+  var footer = document.querySelector('.footer');
 
   var picturesUrl = '/api/pictures';
   var gallery = new Gallery();
@@ -11,14 +13,11 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   var pageSize = 12;
   var currentFilter = 'filter-popular';
 
-  var footer = document.querySelector('.footer');
   var scrollingGap = 100;
   var throttleTimeout = 100;
   var lastCall = Date.now();
 
   var loadedData = [];
-
-  var picturesBlock = document.querySelector('.pictures');
   var renderedPictures = [];
   var renderedNumber = 0;
 
