@@ -38,7 +38,7 @@ define(function() {
   };
 
   Gallery.prototype.setActivePicture = function(number) {
-    this.activePicture = (number < this.pictures.length - 1) ? number : 0;
+    this.activePicture = (number <= this.pictures.length - 1) ? number : 0;
 
     var picture = this.pictures[this.activePicture];
     this.overlayImage.src = picture.url;
