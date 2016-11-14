@@ -224,6 +224,24 @@ define(function() {
     forwardButton.disabled = !resizeFormIsValid();
   });
 
+  window.addEventListener('resizerchange', fillInputs);
+
+  function fillInputs() {
+    var constraints = currentResizer.getConstraint();
+
+    widthController.value = constraints.x;
+    heightController.value = constraints.y;
+    sizeController.value = constraints.side;
+  }
+
+  function setConstraints() {
+    var x = parseInt(widthController.value, 10);
+    var y = parseInt(heightController.value, 10);
+    var side = parseInt(sizeController.value, 10);
+
+    currentResizer.setConstraint(x, y, side);
+  }
+
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
    * файл является изображением, считывается исходник картинки, создается
@@ -342,24 +360,6 @@ define(function() {
    * выбранному значению в форме.
    */
   filterForm.addEventListener('change', changeFilter);
-
-  window.addEventListener('resizerchange', fillInputs);
-
-  function fillInputs() {
-    var constraints = currentResizer.getConstraint();
-
-    widthController.value = constraints.x;
-    heightController.value = constraints.y;
-    sizeController.value = constraints.side;
-  }
-
-  function setConstraints() {
-    var x = parseInt(widthController.value, 10);
-    var y = parseInt(heightController.value, 10);
-    var side = parseInt(sizeController.value, 10);
-
-    currentResizer.setConstraint(x, y, side);
-  }
 
   function changeFilter() {
     if (!filterMap) {
