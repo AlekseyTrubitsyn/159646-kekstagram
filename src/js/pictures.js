@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load', './picture', './gallery', './resizer', './upload'], function(load, Picture, Gallery) {
+define(['./load', './picture', './gallery', './throttle', './resizer', './upload'], function(load, Picture, Gallery, throttle) {
 
   var filtersBlock = document.querySelector('.filters');
   var picturesBlock = document.querySelector('.pictures');
@@ -15,7 +15,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   var scrollingGap = 100;
   var throttleTimeout = 100;
-  var lastCall = Date.now();
 
   var loadedData = [];
   var renderedPictures = [];
@@ -30,10 +29,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
   }, loadCallback);
 
   window.addEventListener('scroll', function() {
-    var isTimeoutEnded = Date.now() - lastCall >= throttleTimeout;
-    if (isTimeoutEnded) {
-      showNextPage();
-    }
+    throttle(showNextPage, throttleTimeout);
   });
 
   filtersBlock.addEventListener('change', function(event) {
@@ -83,7 +79,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
         filter: currentFilter
       }, loadCallback);
     }
-    lastCall = Date.now();
   }
 
   function setFilter(filterId) {
