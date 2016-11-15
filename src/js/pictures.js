@@ -20,6 +20,8 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
   var renderedPictures = [];
   var renderedNumber = 0;
 
+  var throttledNextPage = throttle(showNextPage, throttleTimeout);
+
   hide(filtersBlock);
 
   load(picturesUrl, {
@@ -28,9 +30,7 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
     filter: currentFilter
   }, loadCallback);
 
-  window.addEventListener('scroll', function() {
-    throttle(showNextPage, throttleTimeout);
-  });
+  window.addEventListener('scroll', throttledNextPage);
 
   filtersBlock.addEventListener('change', function(event) {
     if(event.target.classList.contains('filters-radio')) {
@@ -50,7 +50,7 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
     show(filtersBlock);
 
     if (data.length === pageSize) {
-      showNextPage();
+      throttledNextPage();
     }
   }
 

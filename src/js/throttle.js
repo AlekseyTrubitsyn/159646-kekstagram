@@ -1,18 +1,17 @@
 'use strict';
 
 define(function() {
-  var waitForTimeout = false;
+  function throttle(throttlingFunction, timeout) {
+    var lastCall = Date.now();
 
-  function throttle(callback, timeout) {
-    if(!waitForTimeout) {
-      waitForTimeout = true;
+    return function() {
+      var isTimeoutEnded = Date.now() - lastCall >= timeout;
 
-      callback();
-
-      setTimeout(function() {
-        waitForTimeout = false;
-      }, timeout);
-    }
+      if (isTimeoutEnded) {
+        throttlingFunction();
+        lastCall = Date.now();
+      }
+    };
   }
 
   return throttle;
