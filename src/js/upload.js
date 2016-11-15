@@ -208,18 +208,39 @@ define(function() {
   // Проверим данные на валидность сразу при вводе.
   widthController.addEventListener('input', function() {
     checkValueX();
+    setConstraints();
     forwardButton.disabled = !resizeFormIsValid();
   });
 
   heightController.addEventListener('input', function() {
     checkValueY();
+    setConstraints();
     forwardButton.disabled = !resizeFormIsValid();
   });
 
   sizeController.addEventListener('input', function() {
     checkValueSize();
+    setConstraints();
     forwardButton.disabled = !resizeFormIsValid();
   });
+
+  window.addEventListener('resizerchange', fillInputs);
+
+  function fillInputs() {
+    var constraints = currentResizer.getConstraint();
+
+    widthController.value = constraints.x;
+    heightController.value = constraints.y;
+    sizeController.value = constraints.side;
+  }
+
+  function setConstraints() {
+    var x = parseInt(widthController.value, 10);
+    var y = parseInt(heightController.value, 10);
+    var side = parseInt(sizeController.value, 10);
+
+    currentResizer.setConstraint(x, y, side);
+  }
 
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
