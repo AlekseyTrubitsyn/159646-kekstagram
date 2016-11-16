@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./load', './picture', './gallery', './resizer', './upload'], function(load, Picture, Gallery) {
+define(['./load', './picture', './gallery', './throttle', './resizer', './upload'], function(load, Picture, Gallery, throttle) {
 
   var filtersBlock = document.querySelector('.filters');
   var picturesBlock = document.querySelector('.pictures');
@@ -15,11 +15,12 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
 
   var scrollingGap = 100;
   var throttleTimeout = 100;
-  var lastCall = Date.now();
 
   var loadedData = [];
   var renderedPictures = [];
   var renderedNumber = 0;
+
+  var throttledNextPage = throttle(showNextPage, throttleTimeout);
 
   hide(filtersBlock);
 
@@ -29,12 +30,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     filter: currentFilter
   }, loadCallback);
 
-  window.addEventListener('scroll', function() {
-    var isTimeoutEnded = Date.now() - lastCall >= throttleTimeout;
-    if (isTimeoutEnded) {
-      showNextPage();
-    }
-  });
+  window.addEventListener('scroll', throttledNextPage);
 
   filtersBlock.addEventListener('change', function(event) {
     if(event.target.classList.contains('filters-radio')) {
@@ -54,7 +50,7 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
     show(filtersBlock);
 
     if (data.length === pageSize) {
-      showNextPage();
+      throttledNextPage();
     }
   }
 
@@ -83,7 +79,6 @@ define(['./load', './picture', './gallery', './resizer', './upload'], function(l
         filter: currentFilter
       }, loadCallback);
     }
-    lastCall = Date.now();
   }
 
   function setFilter(filterId) {
