@@ -11,7 +11,8 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
 
   var pageNumber = 0;
   var pageSize = 12;
-  var currentFilter = 'filter-popular';
+  var storageFilterKey = 'currentFilter';
+  var currentFilter = localStorage.getItem(storageFilterKey) || 'filter-popular';
 
   var scrollingGap = 100;
   var throttleTimeout = 100;
@@ -30,6 +31,8 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
     filter: currentFilter
   }, loadCallback);
 
+  changeFilterButton();
+
   window.addEventListener('scroll', throttledNextPage);
 
   filtersBlock.addEventListener('change', function(event) {
@@ -37,6 +40,10 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
       setFilter(event.target.id);
     }
   });
+
+  function changeFilterButton() {
+    document.getElementById(currentFilter).checked = true;
+  }
 
   function loadCallback(data) {
     if (!data.length) {
@@ -90,6 +97,7 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
 
     pageNumber = 0;
     currentFilter = filterId;
+    localStorage.setItem(storageFilterKey, currentFilter.toString());
 
     load(picturesUrl, {
       from: pageNumber * pageSize,
