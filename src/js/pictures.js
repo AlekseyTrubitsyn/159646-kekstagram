@@ -11,8 +11,7 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
 
   var pageNumber = 0;
   var pageSize = 12;
-  var storageFilterKey = 'currentFilter';
-  var currentFilter = localStorage.getItem(storageFilterKey) || 'filter-popular';
+  var currentFilter = localStorage.getItem('currentFilter') || 'filter-popular';
 
   var scrollingGap = 100;
   var throttleTimeout = 100;
@@ -97,7 +96,7 @@ define(['./load', './picture', './gallery', './throttle', './resizer', './upload
 
     pageNumber = 0;
     currentFilter = filterId;
-    localStorage.setItem(storageFilterKey, currentFilter.toString());
+    localStorage.setItem('currentFilter', currentFilter);
 
     load(picturesUrl, {
       from: pageNumber * pageSize,
