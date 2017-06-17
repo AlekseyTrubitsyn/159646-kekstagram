@@ -13,11 +13,12 @@
   },
   "homepage": "https://github.com/htmlacademy-javascript/159646-kekstagram",
   "devDependencies": {
+    "body-parser":"*",
     "colors": "1.1.2",
     "copy-webpack-plugin": "^3.0.1",
     "eslint": "3.2.0",
     "eslint-plugin-requirejs": "2.0.1",
-    "express": "4.14.0",
+    "express":"*",
     "finalhandler": "0.5.0",
     "http-server": "0.9.0",
     "imagemagick": "0.1.3",
